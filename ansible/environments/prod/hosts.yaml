@@ -1,0 +1,6 @@
+all:
+  hosts:
+    oklab:
+      ansible_connection: paramiko
+      ansible_user: ok
+      ansible_host: "{{OKLAB_HOST}}"

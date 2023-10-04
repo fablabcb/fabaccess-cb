@@ -1,0 +1,7 @@
+---
+- name: Setup all hosts with common behaviour
+  hosts: all
+  roles:
+    - common
+  tags:
+    - common
