@@ -21,17 +21,15 @@
         -- If you don't specify a port bffh will use the default of `59661`
         -- 'address' can be a IP address or a hostname
         -- If bffh can not bind a port for the specified combination if will log an error but *continue with the remaining ports*
-        { address = "127.0.0.1", port = 59661 },
-        { address = "::1", port = 59661 },
-        { address = "steak.fritz.box", port = 59661 }
+        { address = "127.0.0.1", port = 59661 }
     ],
 
     -- Configure TLS. BFFH requires a PEM-encoded certificate and the associated key as two separate files
-    certfile = "examples/self-signed-cert.pem",
-    keyfile = "examples/self-signed-key.pem",
+    certfile = "/etc/cert/cert.pem",
+    keyfile = "/etc/cert/key.pem",
 
     -- BFFH right now requires a running MQTT broker.
-    mqtt_url = "tcp://localhost:1883",
+    mqtt_url = "tcp://mosquitto:1883",
 
     -- Path to the database file for bffh. bffh will in fact create two files; ${db_path} and ${db_path}.lock.
     -- BFFH will *not* create any directories so ensure that the directory exists and the user running bffh has write
@@ -174,7 +172,7 @@
                 -- which is configured by the (required) 'cmd' parameter. Paths are relative to PWD of bffh. Systemd
                 -- and similar process managers may change this PWD so it's usually the most future-proof to use
                 -- absolute paths.
-                cmd = "./examples/actor.sh",
+                cmd = "/usr/local/lib/bffh/adapters/actor.sh",
                 -- You can pass static args in here, these will be passed to every invocation of the command by this actor.
                 -- args passed here are split by whitespace, so these here will be passed as 5 separate arguments
                 args = "your ad could be here"
@@ -182,7 +180,7 @@
         },
 
         DoorControl1 = {
-            -- This actor calls the actor.py script in examples/
+            -- This actor calls the actor.py script in /usr/local/lib/bffh/adapters/
             -- It gets passed it's own name, so you can have several actors
             -- from the same script.
             -- If you need to pass more arguments to the command you can use the `args` key in
@@ -190,22 +188,22 @@
             module = "Process",
             -- the `args` are passed in front of all other parameters so they are best suited to
             -- optional parameters like e.g. the verboseness
-            params = { cmd = "./examples/actor.py", args = "-vvv" }
+            params = { cmd = "/usr/local/lib/bffh/adapters/actor.py", args = "-vvv" }
         },
         DoorControl2 = {
             module = "Process",
-            params = { cmd = "./examples/actor.py" }
+            params = { cmd = "/usr/local/lib/bffh/adapters/actor.py" }
         },
         DoorControl3 = {
             -- This is an example for how it looks like if an actor is misconfigured.
             -- the actor.py doesn't know anything about DoorControl3 and, if this actor is enabled,
             -- will return with an error showing up in the server logs.
             module = "Process",
-            params = { cmd = "./examples/actor.py" }
+            params = { cmd = "/usr/local/lib/bffh/adapters/actor.py" }
         },
 
-        Bash2 = { module = "Process", params = { cmd = "./examples/actor.sh" , args = "this is a different one" }},
-        FailBash = { module = "Process", params = { cmd = "./examples/fail-actor.sh" }}
+        Bash2 = { module = "Process", params = { cmd = "/usr/local/lib/bffh/adapters/actor.sh" , args = "this is a different one" }},
+        FailBash = { module = "Process", params = { cmd = "/usr/local/lib/bffh/adapters/fail-actor.sh" }}
     },
 
     -- Linkng up machines to actors

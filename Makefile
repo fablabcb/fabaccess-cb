@@ -23,7 +23,7 @@ up: .env ## Start local dev environment with docker-compose
 	@docker-compose -p "${PROJECT}" up --force-recreate
 
 down: .env ## Stop local dev environment with docker-compose
-	@docker-compose -p "${PROJECT}" down
+	@docker-compose -p "${PROJECT}" down -v
 
 ansible-requirements: ## Install ansible requirements via ansible-galaxy.
 	ansible-galaxy collection install -r ./ansible/requirements.yaml
