@@ -1,0 +1,19 @@
+- name: Install mosquitto
+  become: yes
+  ansible.builtin.package:
+    name: mosquitto
+    state: present
+
+- name: Copy configuration
+  become: yes
+  copy:
+    src: mosquitto.conf
+    dest: /etc/mosquitto/conf.d/mosquitto.conf
+  notify:
+    - restart mosquitto
+
+- name: Make sure mosquitto service is running
+  become: yes
+  ansible.builtin.systemd:
+    state: started
+    name: mosquitto

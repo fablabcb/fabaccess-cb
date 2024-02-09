@@ -5,3 +5,11 @@
     - common
   tags:
     - common
+
+- name: Setup mosquitto
+  # gather_facts: no
+  hosts: mosquitto
+  roles:
+    - mosquitto
+  tags:
+    - mosquitto

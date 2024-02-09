@@ -2,5 +2,10 @@ all:
   hosts:
     oklab:
       ansible_connection: paramiko
-      ansible_user: ok
+      ansible_user: "{{OKLAB_USER}}"
+      ansible_become_password: "{{OKLAB_PASSWORD}}"
       ansible_host: "{{OKLAB_HOST}}"
+
+mosquitto:
+  hosts:
+    oklab:

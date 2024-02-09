@@ -22,6 +22,9 @@ help: ## Show help for this Makefile
 up: .env ## Start local dev environment with docker-compose
 	@docker-compose -p "${PROJECT}" up --force-recreate
 
+down: .env ## Stop local dev environment with docker-compose
+	@docker-compose -p "${PROJECT}" down
+
 ansible-requirements: ## Install ansible requirements via ansible-galaxy.
 	ansible-galaxy collection install -r ./ansible/requirements.yaml
 	ansible-galaxy role install -r ./ansible/requirements.yaml
@@ -47,8 +50,11 @@ deploy: ## Deploy fabaccess with ansible.
 		-i "./ansible/environments/${ENVIRONMENT}" \
 		ansible/deploy.yaml
 
-secrets-encrypt: ## Encrypt secrets with ansible-vault
+secrets-edit: ## Edit secrets with ansible-vault.
+	ansible-vault edit --vault-id "${ENVIRONMENT}@prompt" "./ansible/environments/${ENVIRONMENT}/secrets.yaml"
+
+secrets-encrypt: ## Encrypt secrets with ansible-vault.
 	ansible-vault encrypt --vault-id "${ENVIRONMENT}@prompt" "./ansible/environments/${ENVIRONMENT}/secrets.yaml"
 
-secrets-decrypt: ## Decrypt secrets with ansible-vault
+secrets-decrypt: ## Decrypt secrets with ansible-vault.
 	ansible-vault decrypt --vault-id "${ENVIRONMENT}@prompt" "./ansible/environments/${ENVIRONMENT}/secrets.yaml"
